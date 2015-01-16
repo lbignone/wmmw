@@ -1,4 +1,15 @@
-# Simulation Details
+# Base simulation
+
+## Location
+
+    /fast_scratch1/regonzar/lgzoom/out512
+
+## Parameters
+
+Details in 
+
+    parameters-usedvalues
+
 
 ## Cosmological parameters
 
@@ -14,41 +25,22 @@ Planck Collaboration results [[ArXiv]](http://arxiv.org/abs/1303.5062)
 | $n_s$                  |  0.9611 |
 | $Y$                    |   0.248 |
 
+## Halos
 
-## Size and resolution
+Rockstar halos including substructures in
 
-### Base simulation
+    /fast_scratch1/regonzar/lgzoom/out512/halos/xx/hlist.txt
 
-| Box size [Mpc $h^{-1}$] | Particle number | SofteningHalo | SofteningHaloMaxPhys |
-|------------------------|-----------------|---------------|----------------------|
-|                   50.0 | $512^3$         |           1.5 |                  1.0 |
+where xx is the snapshot number
 
+## Initial conditions
 
+    /fast_scratch1/regonzar/lgzoom/ics_gadget_512base.dat
 
-### Zoom simulations
+More information in 
 
-| level | Particle number | offset | extent |
-|-------|-----------------|--------|--------|
-|     9 | $512^3$         | -      | -      |
-|    10 |                 |        |        |
-|    11 |                 |        |        |
+    /fast_scratch1/regonzar/lgzoom/512info
 
-
-## Outputs
-
-|  a   |
-|------|
-| 0.02 |
-| 0.20 |
-| 0.50 |
-| 0.90 |
-| 0.91 |
-| 0.92 |
-| 0.93 |
-| 0.94 |
-| 0.95 |
-| 0.96 |
-| 0.97 |
-| 0.98 |
-| 0.99 |
-| 1.00 |
+- lgzoom.param:  Gadget-2 parameters for base simulation
+- ics_512base.conf: MUSIC config file for base simulation
+- ics_512zoom1.conf: MUSIC config file for a zoom simulation **don't change random seeds and run in a single node with up to 40 threads**
