@@ -1,15 +1,18 @@
-# Base simulation
+# Base simulation 
 
 ## Location
+
+Cluster Geryon2 Centro de Astro-Ingeniería
 
     /fast_scratch1/regonzar/lgzoom/out512
 
 ## Parameters
 
-Details in 
+- N = 512^3
+
+Further details in:
 
     parameters-usedvalues
-
 
 ## Cosmological parameters
 
@@ -27,7 +30,7 @@ Planck Collaboration results [[ArXiv]](http://arxiv.org/abs/1303.5062)
 
 ## Halos
 
-Rockstar halos including substructures in
+Rockstar halos including substructures in:
 
     /fast_scratch1/regonzar/lgzoom/out512/halos/xx/hlist.txt
 
