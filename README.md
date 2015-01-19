@@ -18,15 +18,21 @@ Further details in:
 
 Planck Collaboration results [[ArXiv]](http://arxiv.org/abs/1303.5062)
 
-| Cosmological parameter |  Value  |
-|------------------------|---------|
-| $\Omega_m$             |   0.307 |
-| $\Omega_\Lambda$       |   0.693 |
-| $\Omega_b$             | 0.04825 |
-| $h$                    |   0.677 |
-| $\sigma_8$             |  0.8288 |
-| $n_s$                  |  0.9611 |
-| $Y$                    |   0.248 |
+| Cosmological parameter | Value  |
+| ---------------------- | ------ |
+| $\Omega_m$             | 0.3175 |
+| $\Omega_\Lambda$       | 0.6825 |
+| $\Omega_b$             |  0.049 |
+| $h$                    | 0.6711 |
+| $\sigma_8$             | 0.8288 |
+| $n_s$                  | 0.9611 |
+| $Y$                    |  0.248 |
+
+## Softenings
+
+| type | softening | max softening |
+| ---- | --------- | ------------- |
+| halo |       1.5 |           1.0 |
 
 ## Halos
 
