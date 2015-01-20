@@ -26,9 +26,13 @@ where "simdir" is the simulation directory mentioned above and xxx is the snapsh
 
 ## Initial conditions
 Initial conditions parameter files for MUSIC are located at
+
 	/data4/lbignone/wmmw/512info/ics_512base.conf
+    
 for the base simulation and
+
 	/data4/lbignone/wmmw/512info/ics_512zoom1.conf
+    
 for the zoom region
 
 # Simulation Parameters
