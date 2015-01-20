@@ -49,6 +49,12 @@ for the zoom region
 | ns                     | 0.9611 |
 | Y                      |  0.248 |
 
+## Softenings
+
+|                      | [kcp] |
+| -------------------- | ----- |
+| SofteningHalo        |   1.5 |
+| SofteningHaloMaxPhys |   1.0 |
 
 
 
