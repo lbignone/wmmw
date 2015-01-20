@@ -1,63 +1,53 @@
-# Base simulation 
+# Index
+- [Where to find Stuff](#markdown-header-where-to-find-stuff)
+- [Simulation parameters](markdown-header-simulation-parameters)
 
-## Location
+# Where to find stuff
 
-Cluster Geryon2 Centro de Astro-Ingeniería
+## Simulations
 
-    /fast_scratch1/regonzar/lgzoom/out512
+### Base simulation directory
+	/data4/lbignone/wmmw/out512
 
-## Parameters
+### Zoom simulation directory
+	/data4/lbignone/wmmw/out512zoom
 
-- N = 512^3
 
-Further details in:
+## Halos
+### Rockstar
+	simdir/halos/xx/hlist.txt
 
-    parameters-usedvalues
+where "simdir" is the simulation directory mentioned above and xx is the snapshot number
+
+### FOF
+	simdir/group_"xxx"/
+
+where "simdir" is the simulation directory mentioned above and xxx is the snapshot number
+
+## Initial conditions
+Initial conditions parameter files for MUSIC are located at
+	/data4/lbignone/wmmw/512info/ics_512base.conf
+for the base simulation and
+	/data4/lbignone/wmmw/512info/ics_512zoom1.conf
+for the zoom region
+
+# Simulation Parameters
 
 ## Cosmological parameters
 
-Planck Collaboration results [[ArXiv]](http://arxiv.org/abs/1303.5062)
-
 | Cosmological parameter | Value  |
 | ---------------------- | ------ |
-| $\Omega_m$             | 0.3175 |
-| $\Omega_\Lambda$       | 0.6825 |
-| $\Omega_b$             |  0.049 |
-| $h$                    | 0.6711 |
-| $\sigma_8$             | 0.8288 |
-| $n_s$                  | 0.9611 |
-| $Y$                    |  0.248 |
-
-## Softenings
-
-| type | softening | max softening |
-| ---- | --------- | ------------- |
-| halo |       1.5 |           1.0 |
-
-## Halos
-
-Rockstar halos including substructures in:
-
-    /fast_scratch1/regonzar/lgzoom/out512/halos/xx/hlist.txt
-
-where xx is the snapshot number
-
-## Initial conditions
-
-    /fast_scratch1/regonzar/lgzoom/ics_gadget_512base.dat
-
-More information in 
-
-    /fast_scratch1/regonzar/lgzoom/512info
-
-- lgzoom.param:  Gadget-2 parameters for base simulation
-- ics_512base.conf: MUSIC config file for base simulation
-- ics_512zoom1.conf: MUSIC config file for a zoom simulation **don't change random seeds and run in a single node with up to 40 threads**
+| Omega0	             | 0.3175 |
+| OmegaLambda		     | 0.6825 |
+| OmegaBaryon            |  0.049 |
+| h                      | 0.6711 |
+| sigma8                 | 0.8288 |
+| ns                     | 0.9611 |
+| Y                      |  0.248 |
 
 
-## TODO
 
-- Identify galaxies with FOF
-- Calculate halo mass function
-- Calculate number of neighbours within 500 kpc/h and store their mass
-- Build sample consisting of semi isolated galaxies where the main component mass is > 0.3 times the mass of its companion
+
+
+
+
