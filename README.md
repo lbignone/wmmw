@@ -1,6 +1,6 @@
 # Index
 - [Where to find Stuff](#markdown-header-where-to-find-stuff)
-- [Simulation parameters](markdown-header-simulation-parameters)
+- [Simulation parameters](#markdown-header-simulation-parameters)
 
 # Where to find stuff
 
