@@ -80,7 +80,7 @@ class Simulation:
     """
 
     def __init__(self, name, pot=False,
-                 accel=False, endt=False, tstp=False):
+                 accel=False, endt=False, tstp=False, multiple_files=False):
         """'Simulation' initialization
 
         Args:
@@ -98,7 +98,11 @@ class Simulation:
 
         self.cache = {}
 
-        self.name = name
+        self.basename = name
+
+        if multiple_files:
+            self.name = self.basename+".0"
+
         self.flags = {}
         self.flags["pot"] = pot
         self.flags["accel"] = accel
@@ -320,19 +324,20 @@ class Simulation:
             if key in self.block_sizes.keys():
                 size = self.block_sizes[key]
 
-                data = f.read(4)
-                size_check = unpack(s+'i', data)[0]
+                if size > 0.0:
+                    data = f.read(4)
+                    size_check = unpack(s+'i', data)[0]
 
-                if (size_check != size):
-                    raise NameError("Error in block: %s" % key)
+                    if (size_check != size):
+                        raise NameError("Error in block: %s" % key)
 
-                f.seek(size, 1)
+                    f.seek(size, 1)
 
-                data = f.read(4)
-                size_check = unpack(s+'i', data)[0]
+                    data = f.read(4)
+                    size_check = unpack(s+'i', data)[0]
 
-                if (size_check != size):
-                    raise NameError("Error in block: %s" % key)
+                    if (size_check != size):
+                        raise NameError("Error in block: %s" % key)
 
         f.close()
 
@@ -368,75 +373,85 @@ class Simulation:
 
         s = self.swap
 
-        f = open(self.name, 'rb')
+        for i in range(self.file_number):
+            self.name = self.basename + ".{:d}".format(i)
 
-        size = self.block_sizes[block_type]
+            self._read_header()
 
-        order = self.block_keys.index(block_type)
+            f = open(self.name, 'rb')
+     
+            size = self.block_sizes[block_type]
 
-        skip = 0
-        for key in self.block_keys[0:order]:
-            try:
-                skip += self.block_sizes[key] + 8
-            except:
-                pass
+            order = self.block_keys.index(block_type)
 
-        f.seek(skip, 0)
+            skip = 0
+            for key in self.block_keys[0:order]:
+                try:
+                    skip += self.block_sizes[key] + 8
+                except:
+                    pass
 
-        data = f.read(4)
-        size_check = unpack(s+'i', data)[0]
-        if (size_check != size):
-            raise NameError("Error reading block: %s" % block_type)
+            f.seek(skip, 0)
 
-        offset, read_size, remainder = self._compute_offset(block_type,
-                                                            particle_type)
+            data = f.read(4)
+            size_check = unpack(s+'i', data)[0]
+            if (size_check != size):
+                raise NameError("Error reading block: %s" % block_type)
 
-        f.seek(offset, 1)
+            offset, read_size, remainder = self._compute_offset(block_type,
+                                                                particle_type)
 
-        data_block = f.read(read_size)
+            f.seek(offset, 1)
 
-        f.seek(remainder, 1)
+            data_block = f.read(read_size)
 
-        data = f.read(4)
-        size_check = unpack(s+'i', data)[0]
-        if (size_check != size):
-            raise NameError("Error reading block: %s" % block_type)
+            f.seek(remainder, 1)
 
-        f.close()
+            data = f.read(4)
+            size_check = unpack(s+'i', data)[0]
+            if (size_check != size):
+                raise NameError("Error reading block: %s" % block_type)
 
-        dtype = s+'f4'
-        if (block_type in ["id"]):
-            dtype = s+'u4'
+            f.close()
 
-        block = fromstring(data_block, dtype=dtype)
+            dtype = s+'f4'
+            if (block_type in ["id"]):
+                dtype = s+'u4'
 
-        ydim = self.particle_numbers[particle_type]
-        if (block_type in ["pos", "vel", "acc"]):
-            shape = (ydim, 3)
-        elif (block_type in ["metals"]):
-            dim = len(self.element_keys)
-            shape = (ydim, dim)
-        else:
-            shape = block.shape
+            block = fromstring(data_block, dtype=dtype)
 
-        block.shape = shape
+            ydim = self.particle_numbers[particle_type]
+            if (block_type in ["pos", "vel", "acc"]):
+                shape = (ydim, 3)
+            elif (block_type in ["metals"]):
+                dim = len(self.element_keys)
+                shape = (ydim, dim)
+            else:
+                shape = block.shape
 
-        if block_type in ["pos", "vel", "accel"]:
-            columns = ['x', 'y', 'z']
-        elif block_type in ["metals"]:
-            columns = element_keys
-        else:
-            columns = [block_type]
+            block.shape = shape
+
+            if block_type in ["pos", "vel", "accel"]:
+                columns = ['x', 'y', 'z']
+            elif block_type in ["metals"]:
+                columns = element_keys
+            else:
+                columns = [block_type]
+
+            if i==0:
+                final_block = block
+            else:
+                final_block = concatenate([final_block, block])
 
         if block_type != "id":
             ids = self.read_block("id", particle_type)
-            block = pd.DataFrame(block, columns=columns, index=ids.values)
+            final_block = pd.DataFrame(final_block, columns=columns, index=ids.values)
         else:
-            block = pd.Series(block, name="id")
+            final_block = pd.Series(final_block, name="id")
 
-        self.cache[cache_key] = block
+        self.cache[cache_key] = final_block
 
-        return block
+        return final_block
 
     def _compute_offset(self, block_type, particle_type):
         """Computes offsets from the beginning of the block to the desired
