@@ -1,7 +1,8 @@
+# Author: Lucas A. Bignone
+# Contact: lbignone@iafe.uba.ar
+
 # Plot simulation halo mass function and compare it with theorical results usgin HMFcalc
 # ( http://hmf.icrar.org/ )
-#
-#
 #
 
 from pygadget import Fof
@@ -38,7 +39,7 @@ def mass_function(mass, volume, n_bins):
     return m, dndlogm
 
 # FOF halos
-basedir = '/home/lbignone/Simulations/wmmw/out512'
+basedir = '/home/lbignone/simulations/wmmw/out512'
 
 snapnum = 14
 
