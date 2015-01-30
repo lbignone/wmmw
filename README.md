@@ -107,7 +107,7 @@ The file follows the same format as Rockstar ASCII output with the adition of so
 
 For reference an abreviated table is shown bellow
 
-| #ID      | X        | Y        | Z        | M200c           | Mvir            | Np      | Rvir    | neighbours[500] | massive_neighbour_d[500] | massive_neighbour_mass[500] | neighbours[Rvir] | massive_neighbour_d[Rvir] | massive_neighbour_mass[Rvir] |
+| #ID      | X        | Y        | Z        | M200c           | Mvir            | Np      | Rvir    | neighbours\[500\] | massive_neighbour_d\[500\] | massive_neighbour_mass\[500\] | neighbours\[Rvir\] | massive_neighbour_d\[Rvir\] | massive_neighbour_mass\[Rvir\] |
 |----------|----------|----------|----------|-----------------|-----------------|---------|---------|-----------------|--------------------------|-----------------------------|------------------|---------------------------|------------------------------|
 | 184999.0 | 19.83838 | 29.40285 | 28.9183  | 6647000000.0    | 7878000000.0    | 135.0   | 40.303  | 1               | 0.29457900858683284      | 1148900000.0                | 0                | 0.0                       | 0.0                          |
 | 233107.0 | 31.17134 | 39.4245  | 38.69143 | 5087800000.0    | 5662000000.0    | 83.0    | 36.101  | 0               | 0.0                      | 0.0                         | 0                | 0.0                       | 0.0                          |
