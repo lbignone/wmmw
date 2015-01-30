@@ -47,7 +47,7 @@ The folling information is available in each halo/zoom directory:
 - `ics_512_<halo_id>_level<zoom_level>.conf_log.txt`	MUSIC log file
 - `gadget2_<halo_id>_level<zoom_level>.par`	GADGET2 parameter file
 - `output_list.txt`	List of times for snapshot outputs
-- GADGET2 output files: snapshots, cpu, energy, timings, etc... (only if already run)
+- GADGET2 output files: snapshots, cpu, energy, timings, etc... (only if already computed)
 	
 
 # Simulation Parameters
