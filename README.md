@@ -132,7 +132,7 @@ For reference an abreviated table is shown bellow
 
 Maps of the selected halos are show below
 
-![Halo candidates](halo_candidates.png "Halo candidates")
+![Halo candidates](selected_halos.png "Halo candidates")
 
 
 
