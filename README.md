@@ -1,7 +1,7 @@
 # Index
 - [Where to find Stuff](#markdown-header-where-to-find-stuff)
-	1. Base Simulation(#markdown-header-base-simulation)
-	2. Zoom Simulation(#markdown-header-zoom-simulation)
+	1. [Base Simulation](#markdown-header-base-simulation)
+	2. [Zoom Simulation](#markdown-header-zoom-simulation)
 - [Simulation parameters](#markdown-header-simulation-parameters)
 
 # Where to find stuff
@@ -42,11 +42,11 @@ If `<halo_id>` starst with a letter "R" the halo id corresponds to a Rockstar ha
 
 The folling information is available in each halo/zoom directory:
 
-- ics_512_<halo_id>_level<zoom_level>.dat	MUSIC itial conditions
-- ics_512_<halo_id>_level<zoom_level>.conf	MUSIC initial condition parameter file
-- ics_512_<halo_id>_level<zoom_level>.conf_log.txt	MUSIC log file
-- gadget2_<halo_id>_level<zoom_level>.par	GADGET2 parameter file
-- output_list	List of times for snapshot outputs
+- `ics_512_<halo_id>_level<zoom_level>.dat`	MUSIC itial conditions
+- `ics_512_<halo_id>_level<zoom_level>.conf`	MUSIC initial condition parameter file
+- `ics_512_<halo_id>_level<zoom_level>.conf_log.txt`	MUSIC log file
+- `gadget2_<halo_id>_level<zoom_level>.par`	GADGET2 parameter file
+- `output_list.txt`	List of times for snapshot outputs
 - GADGET2 output files: snapshots, cpu, energy, timings, etc... (only if already run)
 	
 
