@@ -4,6 +4,7 @@
 - [Codes](#markdown-header-codes)
 - [Simulation parameters](#markdown-header-simulation-parameters)
 - [Halo candidates to resimulate](#markdown-header-halo-candidates-to-resimulate)
+- [To Do](#markdown-header-to-do)
 
 # Base Simulation
 
@@ -132,7 +133,16 @@ For reference an abreviated table is shown bellow
 
 Maps of the selected halos are show below
 
-![Halo candidates](selected_halos.png "Halo candidates")
+![Halo candidates](src/selected_halos.png "Halo candidates")
+
+# To Do
+
+- Get access to Geryon from IAFE
+- Complete R33306 level 10 and 11 simulations
+- Run FOF and subfind on completed R33306
+- Study number distribution of subhalo mass in resimulated halos (also cumulative histogram)
+- Prepare initial conditions for all candidates
+- Add baryons
 
 
 
