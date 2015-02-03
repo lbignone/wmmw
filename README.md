@@ -35,7 +35,7 @@ If `<halo_id>` starst with a letter "R" the halo id corresponds to a Rockstar ha
 
 The folling information is available in each halo/zoom directory:
 
-- `ics_512_<halo_id>_level<zoom_level>.dat`	MUSIC itial conditions
+- `ics_512_<halo_id>_level<zoom_level>.dat`	MUSIC initial conditions
 - `ics_512_<halo_id>_level<zoom_level>.conf`	MUSIC initial condition parameter file
 - `ics_512_<halo_id>_level<zoom_level>.conf_log.txt`	MUSIC log file
 - `gadget2_<halo_id>_level<zoom_level>.par`	GADGET2 parameter file
