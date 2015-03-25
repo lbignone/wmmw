@@ -135,28 +135,20 @@ Maps of the selected halos are show below
 
 ![Halo candidates](src/selected_halos.png "Halo candidates")
 
+# Number of particles in test IC
+
+| level | halo particles | bndry particles |   total   |
+|-------|----------------|-----------------|-----------|
+|     9 |      134217728 |                 | 134217728 |
+|    10 |         978120 |       134095463 | 135073583 |
+|    11 |        7704576 |       134344787 | 142049363 |
+
 # To Do
 
-- Get access to Geryon from IAFE
-- Complete R33306 level 10 and 11 simulations
+- ~~Get access to Geryon from IAFE~~
+- ~~Complete R33306 level 10 and 11 simulations~~
 - Run FOF and subfind on completed R33306
 - Study number distribution of subhalo mass in resimulated halos (also cumulative histogram)
 - Prepare initial conditions for all candidates
 - Add baryons
-
-IC prueba:
-
-Para el nivel base son:
-total: 134217728
-
-Para el nivel 10 son:
-halo (alta resolución): 978120
-bndry (baja resolución): 134095463
-total: 135073583
-
-
-Para el nivel 11 son:
-halo (alta resolución): 7704576
-bndry (baja resolución): 134344787
-total: 142049363
 
