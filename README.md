@@ -129,7 +129,7 @@ For reference an abreviated table is shown bellow
 | 228540.0 | 35.64206 | 38.71817 | 29.77349 | 2487800000000.0 | 2877000000000.0 | 33301.0 | 288.066 | 39              | 0.19387939292250872      | 87805000000.0               | 27               | 0.19387939292250872       | 87805000000.0                |
 | 50660.0  | 15.89451 | 40.37899 | 19.91348 | 3430100000000.0 | 3976000000000.0 | 47802.0 | 320.878 | 50              | 0.26444268603990523      | 57607000000.0               | 31               | 0.26444268603990523       | 57607000000.0                |
 | 157661.0 | 39.4172  | 36.42007 | 12.62284 | 3010400000000.0 | 3277000000000.0 | 49065.0 | 300.869 | 128             | 0.12971018387158578      | 13488000000000.0            | 74               | 0.12971018387158578       | 13488000000000.0             |
-| 228338.0 | 24.51139 | 40.2244  | 33.35339 | 3989200000000.0 | 4934000000000.0 | 54312.0 | 344.815 | 92              | 0.3261861129784652       | 100360000000.0              | 68               | 0.3261861129784652        | 100360000000.0               |
+| 228338.0 | 24.51139 | 40.2244  | 33.35339 | 3989200000000.0 | 4934000000000.0 | 54312.0 | 344.815 | 92              | 0.3261861129784652       | 100360000000.0              | 68               | 0.3261861129784652        | 100360000000.0               |q
 
 Maps of the selected halos are show below
 
@@ -147,8 +147,9 @@ Maps of the selected halos are show below
 
 - ~~Get access to Geryon from IAFE~~
 - ~~Complete R33306 level 10 and 11 simulations~~
-- Run FOF and subfind on completed R33306
-- Study number distribution of subhalo mass in resimulated halos (also cumulative histogram)
+- ~~Run FOF and subfind on completed R33306~~
+- ~~Study number distribution of subhalo mass in resimulated halos~~
+- Also cumulative histogram of shubhalo mass function
 - Prepare initial conditions for all candidates
 - Add baryons
 
