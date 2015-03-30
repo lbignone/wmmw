@@ -2,11 +2,11 @@
 # Contact: lbignone@iafe.uba.ar
 
 from struct import unpack
-from numpy import fromstring, fromfile, concatenate
+from numpy import fromstring, fromfile, concatenate, array
 from numpy import sqrt, searchsorted
 import pandas as pd
 from functools import wraps
-#from astropy.utils.console import ProgressBar
+# from astropy.utils.console import ProgressBar
 
 from astropy import units as u
 
@@ -96,9 +96,10 @@ class Simulation:
                 Defaults to False.
         """
 
-        self.cache = {}
+        # self.cache = {}
 
         self.basename = name
+        self.name = name
 
         if multiple_files:
             self.name = self.basename+".0"
@@ -326,7 +327,7 @@ class Simulation:
 
                 if size > 0.0:
                     data = f.read(4)
-                    size_check = unpack(s+'i', data)[0]
+                    size_check = unpack(s+'I', data)[0]
 
                     if (size_check != size):
                         raise NameError("Error in block: %s" % key)
@@ -334,7 +335,7 @@ class Simulation:
                     f.seek(size, 1)
 
                     data = f.read(4)
-                    size_check = unpack(s+'i', data)[0]
+                    size_check = unpack(s+'I', data)[0]
 
                     if (size_check != size):
                         raise NameError("Error in block: %s" % key)
@@ -367,19 +368,20 @@ class Simulation:
             information use the `Simulation` class attributes.
         """
 
-        cache_key = (block_type, particle_type)
-        if cache_key in self.cache:
-            return self.cache[cache_key]
+        # cache_key = (block_type, particle_type)
+        # if cache_key in self.cache:
+        #    return self.cache[cache_key]
 
         s = self.swap
 
         for i in range(self.file_number):
-            self.name = self.basename + ".{:d}".format(i)
+            if self.file_number > 1:
+                self.name = self.basename + ".{:d}".format(i)
 
             self._read_header()
 
             f = open(self.name, 'rb')
-     
+
             size = self.block_sizes[block_type]
 
             order = self.block_keys.index(block_type)
@@ -394,7 +396,7 @@ class Simulation:
             f.seek(skip, 0)
 
             data = f.read(4)
-            size_check = unpack(s+'i', data)[0]
+            size_check = unpack(s+'I', data)[0]
             if (size_check != size):
                 raise NameError("Error reading block: %s" % block_type)
 
@@ -408,7 +410,7 @@ class Simulation:
             f.seek(remainder, 1)
 
             data = f.read(4)
-            size_check = unpack(s+'i', data)[0]
+            size_check = unpack(s+'I', data)[0]
             if (size_check != size):
                 raise NameError("Error reading block: %s" % block_type)
 
@@ -438,18 +440,19 @@ class Simulation:
             else:
                 columns = [block_type]
 
-            if i==0:
+            if i == 0:
                 final_block = block
             else:
                 final_block = concatenate([final_block, block])
 
         if block_type != "id":
             ids = self.read_block("id", particle_type)
-            final_block = pd.DataFrame(final_block, columns=columns, index=ids.values)
+            final_block = pd.DataFrame(final_block, columns=columns,
+                                       index=ids.values)
         else:
             final_block = pd.Series(final_block, name="id")
 
-        self.cache[cache_key] = final_block
+        # self.cache[cache_key] = final_block
 
         return final_block
 
@@ -636,12 +639,11 @@ class Fof:
             "groupmasstype",
             "groupcm",
             "groupsfr",
-            
         ]
 
         self.ngroups = []
         self.nids = []
-
+        totngroups = 0
         value = {}
         for i in range(self.ntask):
             name = basename + "{0:d}".format(i)
@@ -671,10 +673,11 @@ class Fof:
                         dt = data_types[key]
                         data = fromfile(f, dtype=dt, count=1)[0]
 
-                        if i == 0:
+                        if totngroups == 0:
                             value[key] = data
                         else:
                             value[key] = concatenate([value[key], data])
+                    totngroups += ngroups
 
         for key in array_keys:
             setattr(self, key, value[key])
@@ -1041,3 +1044,79 @@ class Subfind:
         string = string.format(nsubhalos=nsubhalos, nids=nids)
 
         return string
+
+
+def filter_bloc_by_ids(block, ids, sorter=[]):
+    """ return block filter by ids
+
+    Args:
+        block: Simulation block
+        ids (array like): list of ids
+        sorter (optional array-like): list of postions that sort
+                                      the block ids, greatly improves spped
+    """
+    ind = block.index.values
+
+    sorter = array(sorter)
+    if sorter.size == 0:
+        sorter = ind.argsort()
+    i = ind.searchsorted(ids, sorter=sorter)
+
+    df = block.iloc[sorter[i]]
+
+    return df
+
+
+def bounding_box(block_pos, ids, sorter=[], padding=[0, 0, 0]):
+    """ Compute bounding box limits, center and extent.
+
+    Returns a dictionary
+
+    Args:
+        block_pos: Simulation postion block
+        ids (array like): list of ids
+        sorter (optional array-like): list of postions that sort
+                                      the block ids, greatly improves spped
+        padding (optional array-like): padding to add to the minimum bounding
+                                       box
+    """
+
+    df = filter_bloc_by_ids(block_pos, ids, sorter)
+    xlims = [df.x.min() - padding[0], df.x.max() + padding[0]]
+    ylims = [df.y.min() - padding[1], df.y.max() + padding[1]]
+    zlims = [df.z.min() - padding[2], df.z.max() + padding[2]]
+
+    xcen = (xlims[0] + xlims[1])/2
+    ycen = (ylims[0] + ylims[1])/2
+    zcen = (zlims[0] + zlims[1])/2
+
+    xext = xlims[1] - xlims[0]
+    yext = ylims[1] - ylims[0]
+    zext = zlims[1] - zlims[0]
+
+    bounding_box = {}
+
+    bounding_box['limits'] = [xlims, ylims, zlims]
+    bounding_box['center'] = [xcen, ycen, zcen]
+    bounding_box['extent'] = [xext, yext, zext]
+
+    return bounding_box
+
+
+def region(block_pos, x0=[0, 0, 0], dx=[10, 10, 10]):
+    x0 = array(x0)
+    dx = array(dx)
+
+    xmax = x0 + dx
+    xmin = x0 - dx
+
+    df = block_pos[
+                    (block_pos.x < xmax[0]) &
+                    (block_pos.x > xmin[0]) &
+                    (block_pos.y < xmax[1]) &
+                    (block_pos.y > xmin[1]) &
+                    (block_pos.z < xmax[2]) &
+                    (block_pos.z > xmin[2])
+                   ]
+
+    return df
