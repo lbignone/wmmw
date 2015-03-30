@@ -149,7 +149,7 @@ Maps of the selected halos are show below
 - ~~Complete R33306 level 10 and 11 simulations~~
 - ~~Run FOF and subfind on completed R33306~~
 - ~~Study number distribution of subhalo mass in resimulated halos~~
-- Also cumulative histogram of shubhalo mass function
+- Also cumulative histogram of subhalo mass function
 - Prepare initial conditions for all candidates
 - Add baryons
 
