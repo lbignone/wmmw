@@ -24,7 +24,7 @@ def mass_function(mass, volume, n_bins):
     """
     bins = np.logspace(np.log10(mass.min()), np.log10(mass.max()), n_bins)
 
-    hist_result = np.histogram(fof.groupmass, bins=bins)
+    hist_result = np.histogram(mass, bins=bins)
 
     m = []
     dlogm = []
@@ -33,54 +33,56 @@ def mass_function(mass, volume, n_bins):
         dlogm.append(np.log10(hist_result[1][i]) - np.log10(hist_result[1][i-1]))
 
     dlogm = np.array(dlogm)
-    V = box_length**3
+    V = volume
     dndlogm = hist_result[0]/(dlogm*V)
 
     return m, dndlogm
 
-# FOF halos
-basedir = '/home/lbignone/simulations/wmmw/out512'
 
-snapnum = 14
+if __name__ == "__main__":
 
-fof = Fof(basedir, snapnum)
+    # FOF halos
+    basedir = '/home/lbignone/simulations/wmmw/out512'
 
-dm_mass = 8.20612e+07 # dark matter mass in M_Sun/h
-box_length = 50.0 # box length in Mpc/h
-V = box_length**3
-n = 100 # number of bins
+    snapnum = 14
 
-fof.groupmass = fof.grouplen * dm_mass
+    fof = Fof(basedir, snapnum)
 
-m, dndlogm = mass_function(fof.groupmass, volume=V, n_bins=n)
+    dm_mass = 8.20612e+07  # dark matter mass in M_Sun/h
+    box_length = 50.0  # box length in Mpc/h
+    V = box_length**3
+    n = 100  # number of bins
 
-plot(m, dndlogm, label="FOF ($512^3$)", linestyle="solid")
+    fof.groupmass = fof.grouplen * dm_mass
+
+    m, dndlogm = mass_function(fof.groupmass, volume=V, n_bins=n)
+
+    plot(m, dndlogm, label="FOF ($512^3$)", linestyle="solid")
+
+    # Rockstar halos
+
+    rock_mass = np.genfromtxt(basedir+"/halos/14/hlist.txt", usecols=[21, ])
+    rock_mass = rock_mass[rock_mass>0]
+
+    m, dndlogm = mass_function(rock_mass, volume=V, n_bins=n)
+
+    plot(m, dndlogm, label=r"Rockstar ($512^3$)", linestyle="dashed")
+
+    # Plot Theorical curve
+
+    fname = "hmfcalc/mVector_PLANCK-SMT .txt" # HMFCalc output
+
+    m, dndlogm = np.genfromtxt(fname, usecols=[0, 7], unpack=True)
+
+    plot(m, dndlogm, label="HMF-calc", linestyle="dotted")
 
 
-# Rockstar halos
+    xlabel(r"Mass ($M_\odot h^{-1}$)")
+    ylabel(r"Mass function $(\frac{dn}{dlogM})$ $h^3 Mpc^{-3}$")
+    xlim(1e10, 1e14)
+    xscale("log")
+    yscale("log")
+    legend(loc=0)
+    grid()
 
-rock_mass = np.genfromtxt(basedir+"/halos/14/hlist.txt", usecols=[21,])
-rock_mass = rock_mass[rock_mass>0]
-
-m, dndlogm = mass_function(rock_mass, volume=V, n_bins=n)
-
-plot(m, dndlogm, label=r"Rockstar ($512^3$)", linestyle="dashed")
-
-# Plot Theorical curve
-
-fname = "hmfcalc/mVector_PLANCK-SMT .txt" # HMFCalc output
-
-m, dndlogm = np.genfromtxt(fname, usecols=[0, 7], unpack=True)
-
-plot(m, dndlogm, label="HMF-calc", linestyle="dotted")
-
-
-xlabel(r"Mass ($M_\odot h^{-1}$)")
-ylabel(r"Mass function $(\frac{dn}{dlogM})$ $h^3 Mpc^{-3}$")
-xlim(1e10, 1e14)
-xscale("log")
-yscale("log")
-legend(loc=0)
-grid()
-
-show()
+    show()
