@@ -1,0 +1,45 @@
+#PBS -V
+
+#!/bin/tcsh
+
+#PBS -S /bin/tcsh
+
+#PBS -N gadget_R{hid}_level{level}_{box}
+
+#PBS -k oe
+
+#PBS -l nodes=1:ppn=40
+
+#PBS -l walltime=335:00:00
+
+#PBS -m bae
+
+#PBS -M lbignone@gmail.com
+
+#
+
+##------------------------------------------------------------------------ 
+
+## La variable PBS_O_WORKDIR es una variable de entorno del PBS, indica
+
+## el PATH absoluto del directorio de trabajo corriente
+
+## y es en este directorio donde quedaran los archivos de salida.
+
+cd $PBS_O_WORKDIR
+
+echo $PBS_O_WORKDIR
+
+#
+
+#
+
+#
+
+echo $PATH
+
+module purge
+
+module load openmpi-1.6.5 gsl-1.16 fftw-2.1.5
+
+mpiexec -np 40 --mca pml ob1 /home/lbignone/wmmw/gadget2/Gadget2 gadget2_R{hid}_level{level}_{box}.par

@@ -1,0 +1,45 @@
+#!/bin/bash
+
+#PBS -V
+
+#PBS -S /bin/bash
+
+#PBS -N ics_R{hid}_level{level}_{box}_{outbaryons}
+
+#PBS -k oe
+
+#PBS -l nodes=1:ppn=8
+
+#PBS -l walltime=72:00:00
+
+#
+
+##------------------------------------------------------------------------ 
+
+## La variable PBS_O_WORKDIR es una variable de entorno del PBS, indica
+
+## el PATH absoluto del directorio de trabajo corriente
+
+## y es en este directorio donde quedaran los archivos de salida.
+
+cd $PBS_O_WORKDIR
+
+echo $PBS_O_WORKDIR
+
+#
+
+#
+
+#
+
+echo $PATH
+
+module purge
+
+module load openmpi-1.6.5 gsl-1.16 fftw-2.1.5
+
+export OMP_NUM_THREADS=8
+
+echo $OMP_NUM_THREADS
+
+/home/lbignone/wmmw/initial_conditions/MUSIC ics_R{hid}_level{level}_{box}_{outbaryons}.par

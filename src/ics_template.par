@@ -1,0 +1,76 @@
+[setup]
+boxlength		= 50
+zstart			= 60
+levelmin		= 9
+levelmin_TF		= 9
+levelmax		= {level}
+padding			= 4 
+overlap			= 2
+region          = ellipsoid
+region_point_file = ../R{hid}_{box}.dat
+align_top		= no
+baryons			= {baryons_toggle}
+use_2LPT		= no
+use_LLA			= no
+periodic_TF		= yes
+
+
+[cosmology]
+Omega_m			= 0.3175
+Omega_L			= 0.6825
+Omega_b			= 0.049
+H0			    = 67.11
+sigma_8			= 0.8344
+nspec			= 0.9624
+transfer		= eisenstein
+
+[random]
+seed[7]			= 1877971
+seed[8]			= 9717351
+seed[9]			= 7456731
+seed[10]		= 4567831
+seed[11]		= 5678931
+seed[12]		= 6789031
+
+[output]
+##generic MUSIC data format (used for testing)
+##requires HDF5 installation and HDF5 enabled in Makefile
+#format			= generic
+#filename		= debug.hdf5
+
+##ENZO - also outputs the settings for the parameter file
+##requires HDF5 installation and HDF5 enabled in Makefile
+#format			= enzo
+#filename		= ic.enzo
+
+##Gadget-2 (type=1: high-res particles, type=5: rest)
+format			= gadget2
+filename		= ics_R{hid}_level{level}_{box}_{outbaryons}.dat
+gadget_lunit    = kpc
+gadget_longids  = {baryons_toggle}
+gadget_spreadcoarse = {spread_toggle}
+
+##Grafic2 compatible format for use with RAMSES
+##option 'ramses_nml'=yes writes out a startup nml file
+#format			= grafic2	
+#filename		= ics_ramses
+#ramses_nml		= yes
+
+##TIPSY compatible with PKDgrav and Gasoline
+#format			= tipsy
+#filename		= ics_tipsy.dat
+
+## NYX compatible output format
+##requires boxlib installation and boxlib enabled in Makefile
+#format			= nyx
+#filename		= init
+
+[poisson]
+fft_fine		= no
+accuracy		= 1e-5
+pre_smooth		= 3
+post_smooth		= 3
+smoother		= gs
+laplace_order   = 6
+grad_order		= 6
+
