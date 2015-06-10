@@ -84,3 +84,41 @@ def filter_by_region(df, xmin, xmax, ymin, ymax, zmin, zmax):
              (df.z > zmin) &
              (df.z < zmax)]
     return out
+
+
+def compute_bounding_box(pos, box_lengh):
+
+    x0 = pos.x[0]
+    y0 = pos.y[0]
+    z0 = pos.z[0]
+
+    dx = pos.x - x0
+    dy = pos.y - y0
+    dz = pos.z - z0
+
+    dx[dx > box_lengh/2.0] = -(dx[dx > box_lengh/2.0] - box_lengh/2.0)
+    dy[dy > box_lengh/2.0] = -(dy[dy > box_lengh/2.0] - box_lengh/2.0)
+    dz[dz > box_lengh/2.0] = -(dz[dz > box_lengh/2.0] - box_lengh/2.0)
+
+    dx[dx < -box_lengh/2.0] = -(dx[dx < -1.0 * box_lengh/2.0] + box_lengh/2.0)
+    dy[dy < -box_lengh/2.0] = -(dy[dy < -1.0 * box_lengh/2.0] + box_lengh/2.0)
+    dz[dz < -box_lengh/2.0] = -(dz[dz < -1.0 * box_lengh/2.0] + box_lengh/2.0)
+
+    x = dx + pos.x[0]
+    y = dy + pos.y[0]
+    z = dz + pos.z[0]
+
+    extent = []
+    center = []
+    for k in [x, y, z]:
+        kmin = k.min()
+        kmax = k.max()
+        extent.append(kmax - kmin)
+        cent = (kmax + kmin)/2.0
+
+        if cent < 0:
+            cent += box_lengh
+        elif cent > box_lengh:
+            cent -= box_lengh
+
+    return center, extent

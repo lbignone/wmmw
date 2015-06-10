@@ -10,6 +10,8 @@ from functools import wraps
 
 from astropy import units as u
 
+from copy import copy
+
 
 particle_keys = [
     "gas",
@@ -79,8 +81,9 @@ class Simulation:
             ('<': little-endian, '>': big-endian).
     """
 
-    def __init__(self, name, pot=False,
-                 accel=False, endt=False, tstp=False, multiple_files=False):
+    def __init__(self, name, pot=False, accel=False, endt=False, tstp=False,
+                 multiple_files=False, skip_file_check=False,
+                 use_longids=False):
         """'Simulation' initialization
 
         Args:
@@ -100,8 +103,10 @@ class Simulation:
 
         self.basename = name
         self.name = name
+        self.multiple_files = multiple_files
+        self.use_longids = use_longids
 
-        if multiple_files:
+        if self.multiple_files:
             self.name = self.basename+".0"
 
         self.flags = {}
@@ -157,6 +162,8 @@ class Simulation:
         ]
 
         self._read_header()
+        if not skip_file_check:
+            self._file_check()
         self.set_units()
 
     def _read_header(self):
@@ -255,8 +262,6 @@ class Simulation:
 
         self._file_structure()
 
-        self._file_check()
-
     def _file_structure(self):
         """Compute block sizes."""
 
@@ -284,7 +289,10 @@ class Simulation:
         self.block_sizes["header"] = 256
         self.block_sizes["pos"] = size_space
         self.block_sizes["vel"] = size_space
-        self.block_sizes["id"] = size
+        if self.use_longids:
+            self.block_sizes["id"] = size*2
+        else:
+            self.block_sizes["id"] = size
         self.block_sizes["mass"] = size_mass
         self.block_sizes["u"] = size_gas
         self.block_sizes["rho"] = size_gas
@@ -342,7 +350,7 @@ class Simulation:
 
         f.close()
 
-    def read_block(self, block_type, particle_type):
+    def read_block(self, block_type, particle_type, iter_files=False):
         """Read block from snapshot file
 
         Args:
@@ -368,19 +376,14 @@ class Simulation:
             information use the `Simulation` class attributes.
         """
 
-        # cache_key = (block_type, particle_type)
-        # if cache_key in self.cache:
-        #    return self.cache[cache_key]
+        if iter_files:
+            return self.read_block_iter(block_type, particle_type)
 
         s = self.swap
 
-        for i in range(self.file_number):
-            if self.file_number > 1:
-                self.name = self.basename + ".{:d}".format(i)
+        self._read_header()
 
-            self._read_header()
-
-            f = open(self.name, 'rb')
+        with open(self.name, 'rb') as f:
 
             size = self.block_sizes[block_type]
 
@@ -414,47 +417,49 @@ class Simulation:
             if (size_check != size):
                 raise NameError("Error reading block: %s" % block_type)
 
-            f.close()
+        dtype = s+'f4'
+        if (block_type in ["id"]):
+            dtype = s+'u4'
+            if self.use_longids:
+                dtype = s+'u8'
 
-            dtype = s+'f4'
-            if (block_type in ["id"]):
-                dtype = s+'u4'
+        block = fromstring(data_block, dtype=dtype)
 
-            block = fromstring(data_block, dtype=dtype)
+        ydim = self.particle_numbers[particle_type]
+        if (block_type in ["pos", "vel", "acc"]):
+            shape = (ydim, 3)
+        elif (block_type in ["metals"]):
+            dim = len(self.element_keys)
+            shape = (ydim, dim)
+        else:
+            shape = block.shape
 
-            ydim = self.particle_numbers[particle_type]
-            if (block_type in ["pos", "vel", "acc"]):
-                shape = (ydim, 3)
-            elif (block_type in ["metals"]):
-                dim = len(self.element_keys)
-                shape = (ydim, dim)
-            else:
-                shape = block.shape
+        block.shape = shape
 
-            block.shape = shape
-
-            if block_type in ["pos", "vel", "accel"]:
-                columns = ['x', 'y', 'z']
-            elif block_type in ["metals"]:
-                columns = element_keys
-            else:
-                columns = [block_type]
-
-            if i == 0:
-                final_block = block
-            else:
-                final_block = concatenate([final_block, block])
+        if block_type in ["pos", "vel", "accel"]:
+            columns = ['x', 'y', 'z']
+        elif block_type in ["metals"]:
+            columns = element_keys
+        else:
+            columns = [block_type]
 
         if block_type != "id":
             ids = self.read_block("id", particle_type)
-            final_block = pd.DataFrame(final_block, columns=columns,
+            final_block = pd.DataFrame(block, columns=columns,
                                        index=ids.values)
         else:
-            final_block = pd.Series(final_block, name="id")
+            final_block = pd.Series(block, name="id")
 
         # self.cache[cache_key] = final_block
 
         return final_block
+
+    def read_block_iter(self, block_type, particle_type):
+        for i in range(self.file_number):
+            snap = copy(self)
+            snap.name = snap.basename + ".%d" % i
+            block = snap.read_block(block_type, particle_type)
+            yield block
 
     def _compute_offset(self, block_type, particle_type):
         """Computes offsets from the beginning of the block to the desired
@@ -477,6 +482,8 @@ class Simulation:
             particle_number = self.particle_numbers
             if block_type in ["pos", "vel", "accel"]:
                 dim = 3
+            if block_type in ["id"] and self.use_longids:
+                dim = 2
 
         elif block_type in ["u", "rho", "ne", "nh", "hsml", "sfr", "endt"]:
             for key in ["gas"]:

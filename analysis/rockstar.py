@@ -15,9 +15,9 @@ columns = [
             "Rvir",
             "Rs",
             "Np",
-            "X",
-            "Y",
-            "Z",
+            "x",
+            "y",
+            "z",
             "VX",
             "VY",
             "VZ",
@@ -43,6 +43,7 @@ columns = [
             "PID"
         ]
 
+
 def rockstar_load(basedir, snap_number):
     """ Load Rockstar ASCII output into a pandas DataFrame
 
@@ -58,6 +59,6 @@ def rockstar_load(basedir, snap_number):
 
     data = np.genfromtxt(fname)
 
-    df = pd.DataFrame(data, columns=columns, index=data[:,0])
+    df = pd.DataFrame(data, columns=columns, index=data[:, 0])
 
     return df
