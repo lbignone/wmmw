@@ -106,7 +106,7 @@ The file follows the same format as Rockstar ASCII output with the adition of so
 - `massive_neighbour_d[Rvir]` Distance to the most massive neighbour inside the virial radius. In Mpc/h
 - `massive_neighbour_mass[Rvir]` Mass of the most massive neighbour inside the virial radius. In MSun/h
 
-For reference an abreviated table is shown bellow
+For reference an abbreviated table is shown bellow
 
 | #ID      | X        | Y        | Z        | M200c           | Mvir            | Np      | Rvir    | neighbours\[500\] | massive_neighbour_d\[500\] | massive_neighbour_mass\[500\] | neighbours\[Rvir\] | massive_neighbour_d\[Rvir\] | massive_neighbour_mass\[Rvir\] |
 |----------|----------|----------|----------|-----------------|-----------------|---------|---------|-----------------|--------------------------|-----------------------------|------------------|---------------------------|------------------------------|
